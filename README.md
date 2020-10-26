@@ -1,6 +1,7 @@
 # Setup Router on Ubuntu
 
-Eaxmple - 
+Set up a server with multiple NICs. Example - 
+
 ens160 is WAN
 
 enx192 is LAN01
@@ -27,15 +28,18 @@ Change /etc/netplan/01...cfg to something similar
 sudo netplan apply
 ```
 
-## Modify IP tables
+## Modify IP tables and make it persistant
 
 ```shell
-iptables -t nat -A POSTROUTING -o ens160 -j MASQUERADE
-iptables -A FORWARD -i ens192  -o ens160 -j ACCEPT
-iptables -A FORWARD -i ens160  -o ens192 -m state --state RELATED,ESTABLISHED -j ACCEPT
-iptables -A FORWARD -i ens224  -o ens160 -j ACCEPT
-iptables -A FORWARD -i ens160  -o ens224 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo apt-get install iptables-persistent
+sudo iptables -t nat -A POSTROUTING -o ens160 -j MASQUERADE
+sudo iptables -A FORWARD -i ens192  -o ens160 -j ACCEPT
+sudo iptables -A FORWARD -i ens160  -o ens192 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i ens224  -o ens160 -j ACCEPT
+sudo iptables -A FORWARD -i ens160  -o ens224 -m state --state RELATED,ESTABLISHED -j ACCEPT
 ...
+sudo iptables-save > /etc/iptables/rules.v4
+
 ```
 
 ## Enable IP forwarding 
@@ -46,5 +50,4 @@ sudo vim /etc/sysctl.conf
 sudo reboot
 ```
 
-```
 
