@@ -24,11 +24,12 @@ network:
   ethernets:
     ens160:
       addresses:
-      - 10.212.36.22/27
-      gateway4: 10.212.36.1
+      - 192.168.1.51/24
+      gateway4: 192.168.1.1
       nameservers:
         addresses:
-        - 10.192.2.10
+        - 192.168.1.8 # IP address of DNS servers
+        - 192.168.1.1
         search:
         - lab.local
     ens192:
@@ -36,7 +37,8 @@ network:
       - 192.168.10.1/23
       nameservers:
         addresses:
-        - 10.192.2.10
+        - 192.168.1.8
+        - 192.168.1.1
         search:
         - lab.local
     ens224:
@@ -44,7 +46,8 @@ network:
       - 192.168.12.1/23
       nameservers:
         addresses:
-        - 10.192.2.10
+        - 192.168.1.8
+        - 192.168.1.1
         search:
         - lab.local
   version: 2
@@ -83,4 +86,3 @@ sudo apt-get install dnsmasq
 sudo systemctl restart dnsmasq
 # Add more...
 ```
-
