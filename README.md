@@ -22,7 +22,7 @@ Change /etc/netplan/01...cfg to something similar
 ```yaml
 
 
-``
+```
 
 ```shell
 sudo netplan apply
