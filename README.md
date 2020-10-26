@@ -4,7 +4,7 @@ Set up a server with multiple NICs. Example -
 
 ens160 is WAN
 
-enx192 is LAN01
+ens192 is LAN01
 
 ens224 is LAN02
 ...
