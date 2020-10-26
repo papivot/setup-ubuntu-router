@@ -76,4 +76,10 @@ sudo vim /etc/sysctl.conf
 sudo reboot
 ```
 
+## Install DNS/DHCP using DNSMASQ
+
+```shell
+sudo apt-get install dnsmasq
+sudo systemctl restart dnsmasq
+```
 
