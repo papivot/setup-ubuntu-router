@@ -2,7 +2,9 @@
 
 Eaxmple - 
 ens160 is WAN
+
 enx192 is LAN01
+
 ens224 is LAN02
 ...
 
