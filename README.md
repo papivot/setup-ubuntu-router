@@ -20,8 +20,34 @@ sudo rm /etc/resolv.conf
 ## Modify Networking
 Change /etc/netplan/01...cfg to something similar
 ```yaml
-
-
+network:
+  ethernets:
+    ens160:
+      addresses:
+      - 10.212.36.22/27
+      gateway4: 10.212.36.1
+      nameservers:
+        addresses:
+        - 10.192.2.10
+        search:
+        - lab.local
+    ens192:
+      addresses:
+      - 192.168.10.1/23
+      nameservers:
+        addresses:
+        - 10.192.2.10
+        search:
+        - lab.local
+    ens224:
+      addresses:
+      - 192.168.12.1/23
+      nameservers:
+        addresses:
+        - 10.192.2.10
+        search:
+        - lab.local
+  version: 2
 ```
 
 ```shell
