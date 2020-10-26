@@ -81,5 +81,6 @@ sudo reboot
 ```shell
 sudo apt-get install dnsmasq
 sudo systemctl restart dnsmasq
+# Add more...
 ```
 
