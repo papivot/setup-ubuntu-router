@@ -1,15 +1,24 @@
+
+# If UI needs to be enabled - 
+
+```
+sudo apt-get install tasksel
+sudo apt-get install gdm3
+sudo tasksel
+# pick the Desktop minimal
+sudo reboot
+```
+
 # Setup Router on Ubuntu
 
 Set up a server with multiple NICs. Example - 
 
 ens160 is WAN
-
 ens192 is LAN01
-
 ens224 is LAN02
 ...
 
-## Disable systemd-resolved on Ubuntu
+## Disable systemd-resolved on Ubuntu (Option 1)
 ```shell
 sudo systemctl disable systemd-resolved
 sudo systemctl stop systemd-resolved
