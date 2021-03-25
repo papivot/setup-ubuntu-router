@@ -67,7 +67,8 @@ sudo iptables -A FORWARD -i ens160  -o ens192 -m state --state RELATED,ESTABLISH
 sudo iptables -A FORWARD -i ens224  -o ens160 -j ACCEPT
 sudo iptables -A FORWARD -i ens160  -o ens224 -m state --state RELATED,ESTABLISHED -j ACCEPT
 ...
-sudo iptables-save > /etc/iptables/rules.v4
+sudo su - 
+iptables-save > /etc/iptables/rules.v4
 
 ```
 
@@ -83,6 +84,8 @@ sudo reboot
 
 ```shell
 sudo apt-get install dnsmasq
+vi /etc/dnsmasq.conf
+uncomment bind-interface
 sudo systemctl restart dnsmasq
 # Add more...
 ```
