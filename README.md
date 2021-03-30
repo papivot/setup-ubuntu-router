@@ -75,6 +75,10 @@ sudo iptables -A FORWARD -i ens192  -o ens160 -j ACCEPT
 sudo iptables -A FORWARD -i ens160  -o ens192 -m state --state RELATED,ESTABLISHED -j ACCEPT
 sudo iptables -A FORWARD -i ens224  -o ens160 -j ACCEPT
 sudo iptables -A FORWARD -i ens160  -o ens224 -m state --state RELATED,ESTABLISHED -j ACCEPT
+# enable multicast routing
+iptables -A INPUT   -s 224.0.0.0/4 -j ACCEPT
+iptables -A FORWARD -s 224.0.0.0/4 -d 224.0.0.0/4 -j ACCEPT
+iptables -A OUTPUT  -d 224.0.0.0/4 -j ACCEPT
 ...
 sudo su - 
 iptables-save > /etc/iptables/rules.v4
