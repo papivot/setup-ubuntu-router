@@ -83,6 +83,8 @@ iptables -A OUTPUT  -d 224.0.0.0/4 -j ACCEPT
 sudo su - 
 iptables-save > /etc/iptables/rules.v4
 
+ip route add 224.0.0.0/4 dev ens192 #on the private nw
+
 ```
 
 ## Enable IP forwarding 
