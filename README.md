@@ -97,10 +97,13 @@ sudo reboot
 
 ## Install DNS/DHCP using DNSMASQ
 
+Values fot the configuration file /etc/dnsmasq.conf
+
 ```shell
-sudo apt-get install dnsmasq
-vi /etc/dnsmasq.conf
-uncomment bind-interface
-sudo systemctl restart dnsmasq
+except-interface=ens192  # Public interface that you do not need to serve DNS/DHCP
+bind-interfaces
+dhcp-option=3,192.168.100.1 # E.g. DHCP on the 1st private interface
+dhcp-range=192.168.100.5,192.168.100.15,255.255.255.0,12h # E.g. DHCP rage to serve
+domain=env1.lab.local # E.g. DHCP domain
 # Add more...
 ```
