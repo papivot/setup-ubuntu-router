@@ -18,10 +18,12 @@ apt-get install jq yq dnsmasq iptables-persistent -y
 
 Set up a server with multiple NICs. Example - 
 
-ens160 is WAN_NIC
-ens192 is LAN1_NIC
-ens224 is LAN2_NIC
+```shell
+export WAN_NIC=ens160 # Note that this is the NIC used to talk to the outside world.
+export LAN1_NIC=ens192 # Used for Private Network #1. ens... need to be validated with correct MAC address
+export LAN2_NIC=ens224 # Used for Private Network #2. ens... need to be validated with correct MAC address
 ...
+```
 
 ## Disable systemd-resolved on Ubuntu (Option 1)
 ```shell
@@ -69,34 +71,34 @@ network:
 ```
 
 ```shell
-sudo netplan apply
+# netplan apply
 ```
 
 ## Modify IP tables and make it persistant
 
 ```shell
-$ iptables -t nat -A POSTROUTING -o ${WAN_NIC} -j MASQUERADE
-$ iptables -A FORWARD -i ${LAN1_NIC}  -o ${WAN_NIC}  -j ACCEPT
-$ iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN1_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
-$ iptables -A FORWARD -i ${LAN2_NIC}  -o ${WAN_NIC}  -j ACCEPT
-$ iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN2_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
+# iptables -t nat -A POSTROUTING -o ${WAN_NIC} -j MASQUERADE
+# iptables -A FORWARD -i ${LAN1_NIC}  -o ${WAN_NIC}  -j ACCEPT
+# iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN1_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
+# iptables -A FORWARD -i ${LAN2_NIC}  -o ${WAN_NIC}  -j ACCEPT
+# iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN2_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
 ...
 ...
-# enable multicast routing
-$ iptables -A INPUT   -s 224.0.0.0/4 -j ACCEPT
-$ iptables -A FORWARD -s 224.0.0.0/4 -d 224.0.0.0/4 -j ACCEPT
-$ iptables -A OUTPUT  -d 224.0.0.0/4 -j ACCEPT
+## enable multicast routing
+# iptables -A INPUT   -s 224.0.0.0/4 -j ACCEPT
+# iptables -A FORWARD -s 224.0.0.0/4 -d 224.0.0.0/4 -j ACCEPT
+# iptables -A OUTPUT  -d 224.0.0.0/4 -j ACCEPT
 ...
-$ iptables-save > /etc/iptables/rules.v4
+# iptables-save > /etc/iptables/rules.v4
 
-$ ip route add 224.0.0.0/4 dev ${LAN1_NIC} #on the private nw
+# ip route add 224.0.0.0/4 dev ${LAN1_NIC} #on the private nw
 ```
 
 ## Enable IP forwarding 
 
 ```shell 
-$ cp -p /etc/sysctl.conf  /etc/sysctl.conf.bck
-$ sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
+# cp -p /etc/sysctl.conf  /etc/sysctl.conf.bck
+# sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
 ```
 
 ## Install DNS/DHCP using DNSMASQ
@@ -113,5 +115,5 @@ domain=env1.lab.local # E.g. DHCP domain
 ```
 
 ```shell
-reboot
+# reboot
 ```
