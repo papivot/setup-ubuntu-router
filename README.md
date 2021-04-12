@@ -18,7 +18,7 @@ foo@bar:~$ apt-get install jq yq dnsmasq iptables-persistent -y
 
 Set up a server with multiple NICs. Example - 
 
-```shell
+```console
 foo@bar:~$ export WAN_NIC=ens160 # Note that this is the NIC used to talk to the outside world.
 foo@bar:~$ export LAN1_NIC=ens192 # Used for Private Network #1. ens... need to be validated with correct MAC address
 foo@bar:~$ export LAN2_NIC=ens224 # Used for Private Network #2. ens... need to be validated with correct MAC address
@@ -26,7 +26,7 @@ foo@bar:~$ export LAN2_NIC=ens224 # Used for Private Network #2. ens... need to 
 ```
 
 ## Disable systemd-resolved on Ubuntu (Option 1)
-```shell
+```console
 foo@bar:~$ sudo systemctl disable systemd-resolved
 foo@bar:~$ sudo systemctl stop systemd-resolved
 # If /etc/resolv.conf is a symbolic link to ../run/systemd/resolve/stub-resolv.conf
@@ -70,13 +70,13 @@ network:
   version: 2
 ```
 
-```shell
+```console
 foo@bar:~$ netplan apply
 ```
 
 ## Modify IP tables and make it persistant
 
-```shell
+```console
 foo@bar:~$ iptables -t nat -A POSTROUTING -o ${WAN_NIC} -j MASQUERADE
 foo@bar:~$ iptables -A FORWARD -i ${LAN1_NIC}  -o ${WAN_NIC}  -j ACCEPT
 foo@bar:~$ iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN1_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
@@ -96,7 +96,7 @@ foo@bar:~$ ip route add 224.0.0.0/4 dev ${LAN1_NIC} #on the private nw
 
 ## Enable IP forwarding 
 
-```shell 
+```console 
 foo@bar:~$ cp -p /etc/sysctl.conf  /etc/sysctl.conf.bck
 foo@bar:~$ sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
 ```
@@ -105,7 +105,7 @@ foo@bar:~$ sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
 
 Values fot the configuration file /etc/dnsmasq.conf
 
-```shell
+```console
 except-interface=${WAN_NIC}  # Public interface that you do not need to serve DNS/DHCP
 bind-interfaces
 dhcp-option=3,192.168.100.1 # E.g. DHCP on the 1st private interface
@@ -114,6 +114,6 @@ domain=env1.lab.local # E.g. DHCP domain
 # Add more...
 ```
 
-```shell
+```console
 foo@bar:~$ reboot
 ```
