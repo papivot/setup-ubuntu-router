@@ -1,12 +1,4 @@
 
-# If UI needs to be enabled - 
-
-```console
-foo@bar:~$ sudo apt-get install tasksel gdm3
-foo@bar:~$ sudo tasksel install ubuntu-desktop-minimal
-foo@bar:~$ sudo reboot
-```
-
 # Setup Router on Ubuntu (RUN THIS ENTIRE AS ROOT)
 
 ## Install pre-reqs
@@ -117,3 +109,13 @@ domain=env1.lab.local # E.g. DHCP domain
 ```console
 foo@bar:~$ reboot
 ```
+
+---
+# If UI needs to be enabled - 
+
+```console
+foo@bar:~$ sudo apt-get install tasksel gdm3
+foo@bar:~$ sudo tasksel install ubuntu-desktop-minimal
+foo@bar:~$ sudo reboot
+```
+
