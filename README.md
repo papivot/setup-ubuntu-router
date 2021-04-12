@@ -1,7 +1,7 @@
 
 # If UI needs to be enabled - 
 
-```
+```console
 sudo apt-get install tasksel gdm3
 sudo tasksel install ubuntu-desktop-minimal
 sudo reboot
@@ -11,9 +11,9 @@ sudo reboot
 
 ## Install pre-reqs
 
-```shell
-apt-get update
-apt-get install jq yq dnsmasq iptables-persistent -y
+```console
+$ apt-get update
+$ apt-get install jq yq dnsmasq iptables-persistent -y
 ```
 
 Set up a server with multiple NICs. Example - 
