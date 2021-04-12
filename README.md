@@ -77,6 +77,7 @@ foo@bar:~$ netplan apply
 ## Modify IP tables, making it persistant and configuring IP forwarding
 
 ```console
+## enable iptables for NAT and forwarding
 foo@bar:~$ iptables -t nat -A POSTROUTING -o ${WAN_NIC} -j MASQUERADE
 foo@bar:~$ iptables -A FORWARD -i ${LAN1_NIC}  -o ${WAN_NIC}  -j ACCEPT
 foo@bar:~$ iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN1_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
@@ -89,12 +90,14 @@ foo@bar:~$ iptables -A INPUT   -s 224.0.0.0/4 -j ACCEPT
 foo@bar:~$ iptables -A FORWARD -s 224.0.0.0/4 -d 224.0.0.0/4 -j ACCEPT
 foo@bar:~$ iptables -A OUTPUT  -d 224.0.0.0/4 -j ACCEPT
 ...
+## persist the changes
 foo@bar:~$ iptables-save > /etc/iptables/rules.v4
 
 foo@bar:~$ ip route add 224.0.0.0/4 dev ${LAN1_NIC} #on the private nw
 ```
 
 ```console 
+## enable IP forwarding
 foo@bar:~$ cp -p /etc/sysctl.conf  /etc/sysctl.conf.bck
 foo@bar:~$ sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
 ```
