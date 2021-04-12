@@ -4,8 +4,7 @@
 ```
 sudo apt-get install tasksel
 sudo apt-get install gdm3
-sudo tasksel
-# pick the Desktop minimal
+sudo tasksel install ubuntu-desktop-minimal
 sudo reboot
 ```
 
