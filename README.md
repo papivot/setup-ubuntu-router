@@ -9,7 +9,14 @@ sudo tasksel
 sudo reboot
 ```
 
-# Setup Router on Ubuntu
+# Setup Router on Ubuntu (RUN THIS ENTIRE AS ROOT)
+
+## Install pre-reqs
+
+```shell
+apt-get update
+apt-get install jq yq dnsmasq iptables-persistent -y
+```
 
 Set up a server with multiple NICs. Example - 
 
@@ -69,30 +76,27 @@ sudo netplan apply
 ## Modify IP tables and make it persistant
 
 ```shell
-sudo apt-get install iptables-persistent
-sudo iptables -t nat -A POSTROUTING -o ens160 -j MASQUERADE
-sudo iptables -A FORWARD -i ens192  -o ens160 -j ACCEPT
-sudo iptables -A FORWARD -i ens160  -o ens192 -m state --state RELATED,ESTABLISHED -j ACCEPT
-sudo iptables -A FORWARD -i ens224  -o ens160 -j ACCEPT
-sudo iptables -A FORWARD -i ens160  -o ens224 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -t nat -A POSTROUTING -o ens160 -j MASQUERADE
+iptables -A FORWARD -i ens192  -o ens160 -j ACCEPT
+iptables -A FORWARD -i ens160  -o ens192 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i ens224  -o ens160 -j ACCEPT
+iptables -A FORWARD -i ens160  -o ens224 -m state --state RELATED,ESTABLISHED -j ACCEPT
 # enable multicast routing
 iptables -A INPUT   -s 224.0.0.0/4 -j ACCEPT
 iptables -A FORWARD -s 224.0.0.0/4 -d 224.0.0.0/4 -j ACCEPT
 iptables -A OUTPUT  -d 224.0.0.0/4 -j ACCEPT
 ...
-sudo su - 
 iptables-save > /etc/iptables/rules.v4
 
 ip route add 224.0.0.0/4 dev ens192 #on the private nw
-
 ```
 
 ## Enable IP forwarding 
 
 ```shell 
-sudo vim /etc/sysctl.conf 
-# Modify file to uncomment net.ipv4.ip_forward=1
-sudo reboot
+cp -p /etc/sysctl.conf  /etc/sysctl.conf.bck
+sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
+reboot
 ```
 
 ## Install DNS/DHCP using DNSMASQ
