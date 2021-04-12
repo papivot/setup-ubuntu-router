@@ -25,7 +25,7 @@ foo@bar:~$ export LAN2_NIC=ens224 # Used for Private Network #2. ens... need to 
 ...
 ```
 
-## Disable systemd-resolved on Ubuntu (Option 1)
+## Disable systemd-resolved on Ubuntu (Optional)
 ```console
 foo@bar:~$ sudo systemctl disable systemd-resolved
 foo@bar:~$ sudo systemctl stop systemd-resolved
@@ -74,7 +74,7 @@ network:
 foo@bar:~$ netplan apply
 ```
 
-## Modify IP tables and make it persistant
+## Modify IP tables, making it persistant and configuring IP forwarding
 
 ```console
 foo@bar:~$ iptables -t nat -A POSTROUTING -o ${WAN_NIC} -j MASQUERADE
@@ -94,14 +94,11 @@ foo@bar:~$ iptables-save > /etc/iptables/rules.v4
 foo@bar:~$ ip route add 224.0.0.0/4 dev ${LAN1_NIC} #on the private nw
 ```
 
-## Enable IP forwarding 
-
 ```console 
 foo@bar:~$ cp -p /etc/sysctl.conf  /etc/sysctl.conf.bck
 foo@bar:~$ sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
 ```
-
-## Install DNS/DHCP using DNSMASQ
+## Setup DNS/DHCP using DNSMASQ
 
 Values fot the configuration file /etc/dnsmasq.conf
 
