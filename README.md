@@ -2,9 +2,9 @@
 # If UI needs to be enabled - 
 
 ```console
-sudo apt-get install tasksel gdm3
-sudo tasksel install ubuntu-desktop-minimal
-sudo reboot
+foo@bar:~$ sudo apt-get install tasksel gdm3
+foo@bar:~$ sudo tasksel install ubuntu-desktop-minimal
+foo@bar:~$ sudo reboot
 ```
 
 # Setup Router on Ubuntu (RUN THIS ENTIRE AS ROOT)
@@ -13,24 +13,24 @@ sudo reboot
 
 ```console
 foo@bar:~$ apt-get update
-apt-get install jq yq dnsmasq iptables-persistent -y
+foo@bar:~$ apt-get install jq yq dnsmasq iptables-persistent -y
 ```
 
 Set up a server with multiple NICs. Example - 
 
 ```shell
-export WAN_NIC=ens160 # Note that this is the NIC used to talk to the outside world.
-export LAN1_NIC=ens192 # Used for Private Network #1. ens... need to be validated with correct MAC address
-export LAN2_NIC=ens224 # Used for Private Network #2. ens... need to be validated with correct MAC address
+foo@bar:~$ export WAN_NIC=ens160 # Note that this is the NIC used to talk to the outside world.
+foo@bar:~$ export LAN1_NIC=ens192 # Used for Private Network #1. ens... need to be validated with correct MAC address
+foo@bar:~$ export LAN2_NIC=ens224 # Used for Private Network #2. ens... need to be validated with correct MAC address
 ...
 ```
 
 ## Disable systemd-resolved on Ubuntu (Option 1)
 ```shell
-sudo systemctl disable systemd-resolved
-sudo systemctl stop systemd-resolved
+foo@bar:~$ sudo systemctl disable systemd-resolved
+foo@bar:~$ sudo systemctl stop systemd-resolved
 # If /etc/resolv.conf is a symbolic link to ../run/systemd/resolve/stub-resolv.conf
-sudo rm /etc/resolv.conf
+foo@bar:~$ sudo rm /etc/resolv.conf
 ```
 
 ## Modify Networking
@@ -71,34 +71,34 @@ network:
 ```
 
 ```shell
-# netplan apply
+foo@bar:~$ netplan apply
 ```
 
 ## Modify IP tables and make it persistant
 
 ```shell
-# iptables -t nat -A POSTROUTING -o ${WAN_NIC} -j MASQUERADE
-# iptables -A FORWARD -i ${LAN1_NIC}  -o ${WAN_NIC}  -j ACCEPT
-# iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN1_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
-# iptables -A FORWARD -i ${LAN2_NIC}  -o ${WAN_NIC}  -j ACCEPT
-# iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN2_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
+foo@bar:~$ iptables -t nat -A POSTROUTING -o ${WAN_NIC} -j MASQUERADE
+foo@bar:~$ iptables -A FORWARD -i ${LAN1_NIC}  -o ${WAN_NIC}  -j ACCEPT
+foo@bar:~$ iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN1_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
+foo@bar:~$ iptables -A FORWARD -i ${LAN2_NIC}  -o ${WAN_NIC}  -j ACCEPT
+foo@bar:~$ iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN2_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
 ...
 ...
 ## enable multicast routing
-# iptables -A INPUT   -s 224.0.0.0/4 -j ACCEPT
-# iptables -A FORWARD -s 224.0.0.0/4 -d 224.0.0.0/4 -j ACCEPT
-# iptables -A OUTPUT  -d 224.0.0.0/4 -j ACCEPT
+foo@bar:~$ iptables -A INPUT   -s 224.0.0.0/4 -j ACCEPT
+foo@bar:~$ iptables -A FORWARD -s 224.0.0.0/4 -d 224.0.0.0/4 -j ACCEPT
+foo@bar:~$ iptables -A OUTPUT  -d 224.0.0.0/4 -j ACCEPT
 ...
-# iptables-save > /etc/iptables/rules.v4
+foo@bar:~$ iptables-save > /etc/iptables/rules.v4
 
-# ip route add 224.0.0.0/4 dev ${LAN1_NIC} #on the private nw
+foo@bar:~$ ip route add 224.0.0.0/4 dev ${LAN1_NIC} #on the private nw
 ```
 
 ## Enable IP forwarding 
 
 ```shell 
-# cp -p /etc/sysctl.conf  /etc/sysctl.conf.bck
-# sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
+foo@bar:~$ cp -p /etc/sysctl.conf  /etc/sysctl.conf.bck
+foo@bar:~$ sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
 ```
 
 ## Install DNS/DHCP using DNSMASQ
@@ -115,5 +115,5 @@ domain=env1.lab.local # E.g. DHCP domain
 ```
 
 ```shell
-# reboot
+foo@bar:~$ reboot
 ```
