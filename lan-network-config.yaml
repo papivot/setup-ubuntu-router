@@ -1,0 +1,41 @@
+---
+lannetwork:
+- devicename: ens256
+  addresses:
+  - 192.168.100.1/23
+  nameservers:
+    addresses:
+    - 10.142.7.21
+    - 10.142.7.22
+    search:
+    - eng.vmware.com
+    - lab.local
+  dhcp:
+    enabled: true
+    startip: 192.168.100.5
+    endip: 192.168.100.15
+    domain: env1.lab.local
+- devicename: ens161
+  addresses:
+  - 192.168.102.1/23
+  nameservers:
+    addresses:
+    - 10.142.7.21
+    - 10.142.7.22
+    search:
+    - eng.vmware.com
+    - lab.local
+  dhcp:
+    enabled: false
+- devicename: ens193
+  addresses:
+  - 192.168.104.1/23
+  nameservers:
+    addresses:
+    - 10.142.7.21
+    - 10.142.7.22
+    search:
+    - eng.vmware.com
+    - lab.local
+  dhcp:
+    enabled: false
