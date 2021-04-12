@@ -12,8 +12,8 @@ sudo reboot
 ## Install pre-reqs
 
 ```console
-$ apt-get update
-$ apt-get install jq yq dnsmasq iptables-persistent -y
+foo@bar:~$ apt-get update
+apt-get install jq yq dnsmasq iptables-persistent -y
 ```
 
 Set up a server with multiple NICs. Example - 
