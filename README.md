@@ -31,7 +31,7 @@ Change /etc/netplan/01...cfg to something similar
 ```yaml
 network:
   ethernets:
-    ens160:
+    ${WAN_NIC}:
       addresses:
       - 192.168.1.51/24
       gateway4: 192.168.1.1
@@ -41,18 +41,18 @@ network:
         - 192.168.1.1
         search:
         - lab.local
-    ens192:
+    ${LAN1_NIC}:
       addresses:
-      - 192.168.10.1/23
+      - 192.168.100.1/23
       nameservers:
         addresses:
         - 192.168.1.8
         - 192.168.1.1
         search:
         - lab.local
-    ens224:
+    ${LAN2_NIC}:
       addresses:
-      - 192.168.12.1/23
+      - 192.168.102.1/23
       nameservers:
         addresses:
         - 192.168.1.8
