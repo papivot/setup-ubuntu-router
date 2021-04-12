@@ -2,8 +2,7 @@
 # If UI needs to be enabled - 
 
 ```
-sudo apt-get install tasksel
-sudo apt-get install gdm3
+sudo apt-get install tasksel gdm3
 sudo tasksel install ubuntu-desktop-minimal
 sudo reboot
 ```
