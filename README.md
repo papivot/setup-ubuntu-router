@@ -75,6 +75,10 @@ foo@bar:~$ iptables -A FORWARD -i ${LAN1_NIC}  -o ${WAN_NIC}  -j ACCEPT
 foo@bar:~$ iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN1_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
 foo@bar:~$ iptables -A FORWARD -i ${LAN2_NIC}  -o ${WAN_NIC}  -j ACCEPT
 foo@bar:~$ iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN2_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+## Additional DNAT rules to expose internal IP addresses to the outside world 
+## E.g. Elasticsearch running on port 9200 on private IP 192.168.104.105
+foo@bar:~$ iptables -t nat -A PREROUTING -p tcp --dport 9200 -j DNAT --to-destination 192.168.104.105:9200
 ...
 ...
 ## enable multicast routing
