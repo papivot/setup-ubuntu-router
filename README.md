@@ -17,14 +17,6 @@ foo@bar:~$ export LAN2_NIC=ens224 # Used for Private Network #2. ens... need to 
 ...
 ```
 
-## Disable systemd-resolved on Ubuntu (Optional)
-```console
-foo@bar:~$ sudo systemctl disable systemd-resolved
-foo@bar:~$ sudo systemctl stop systemd-resolved
-# If /etc/resolv.conf is a symbolic link to ../run/systemd/resolve/stub-resolv.conf
-foo@bar:~$ sudo rm /etc/resolv.conf
-```
-
 ## Modify Networking
 Change /etc/netplan/01...cfg to something similar
 
@@ -66,6 +58,71 @@ network:
 foo@bar:~$ netplan apply
 ```
 
+## If planning to use multiple VLANs on one of the private NIC ( for e.g. LAN1_NIC - ens224)
+
+```console
+foo@bar:~$ sudo apt-get install vlan
+foo@bar:~$ sudo modprobe 8021q
+foo@bar:~$ sudo su -c 'echo "8021q" >> /etc/modules'
+```
+
+
+```yaml
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    ens192:
+      addresses:
+      - 10.197.107.62/24
+      gateway4: 10.197.107.253
+      nameservers:
+        addresses:
+        - 10.142.7.21
+        - 10.142.7.22
+        search:
+        - eng.vmware.com
+    ${LAN1_NIC}:
+      addresses:
+      - 192.168.100.1/23
+      nameservers:
+        addresses:
+        - 10.142.7.21
+        - 10.142.7.22
+        search:
+        - eng.vmware.com
+        - lab.local
+  vlans:
+    vlan102:
+      id: 102
+      link: ${LAN1_NIC} 
+      addresses:
+      - 192.168.102.1/23
+      nameservers:
+        addresses:
+        - 10.142.7.21
+        - 10.142.7.22
+        search:
+        - eng.vmware.com
+        - lab.local
+    vlan104:
+      id: 104
+      link: ${LAN1_NIC}
+      addresses:
+      - 192.168.104.1/24
+      nameservers:
+        addresses:
+        - 10.142.7.21
+        - 10.142.7.22
+        search:
+        - eng.vmware.com
+        - lab.local
+  version: 2
+```
+
+```console
+foo@bar:~$ netplan apply
+```
+
 ## Modify IP tables, making it persistant and configuring IP forwarding
 
 ```console
@@ -75,6 +132,12 @@ foo@bar:~$ iptables -A FORWARD -i ${LAN1_NIC}  -o ${WAN_NIC}  -j ACCEPT
 foo@bar:~$ iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN1_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
 foo@bar:~$ iptables -A FORWARD -i ${LAN2_NIC}  -o ${WAN_NIC}  -j ACCEPT
 foo@bar:~$ iptables -A FORWARD -i ${WAN_NIC}   -o ${LAN2_NIC} -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+## If using VLANS (102 and 104 are VLAN IDs)
+foo@bar:~$ iptables -A FORWARD -i ${LAN1_NIC}.102  -o ${WAN_NIC}  -j ACCEPT
+foo@bar:~$ iptables -A FORWARD -i ${WAN_NIC}  -o ${LAN1_NIC}.102 -m state --state RELATED,ESTABLISHED -j ACCEPT
+foo@bar:~$ iptables -A FORWARD -i ${LAN1_NIC}.104  -o ${WAN_NIC}  -j ACCEPT
+foo@bar:~$ iptables -A FORWARD -i ${WAN_NIC}  -o ${LAN1_NIC}.104 -m state --state RELATED,ESTABLISHED -j ACCEPT
 
 ## Additional DNAT rules to expose internal IP addresses to the outside world 
 ## E.g. Elasticsearch running on port 9200 on private IP 192.168.104.105
@@ -97,6 +160,16 @@ foo@bar:~$ ip route add 224.0.0.0/4 dev ${LAN1_NIC} #on the private nw
 foo@bar:~$ cp -p /etc/sysctl.conf  /etc/sysctl.conf.bck
 foo@bar:~$ sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
 ```
+
+
+## Disable systemd-resolved on Ubuntu (Optional)
+```console
+foo@bar:~$ sudo systemctl disable systemd-resolved
+foo@bar:~$ sudo systemctl stop systemd-resolved
+# If /etc/resolv.conf is a symbolic link to ../run/systemd/resolve/stub-resolv.conf
+foo@bar:~$ sudo rm /etc/resolv.conf
+```
+
 ## Setup DNS/DHCP using DNSMASQ
 
 Values fot the configuration file /etc/dnsmasq.conf
@@ -113,6 +186,9 @@ domain=env1.lab.local # E.g. DHCP domain
 ```console
 foo@bar:~$ reboot
 ```
+---
+
+
 
 ---
 # If UI needs to be enabled - 
