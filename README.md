@@ -58,7 +58,8 @@ network:
 foo@bar:~$ netplan apply
 ```
 
-## If planning to use multiple VLANs on one of the private NIC ( for e.g. LAN1_NIC - ens224)
+## If planning to use multiple VLANs on one of the private NIC 
+In this example LAN1_NIC - ens224 will be the native VLAN and VLAN 102 and 104 will be cofigured on the interface. Make sure that the Switch that this interface connects on allows all VLANs (4095). 
 
 ```console
 foo@bar:~$ sudo apt-get install vlan
