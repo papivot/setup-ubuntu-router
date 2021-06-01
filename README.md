@@ -109,7 +109,7 @@ network:
       id: 104
       link: ${LAN1_NIC}
       addresses:
-      - 192.168.104.1/24
+      - 192.168.104.1/23
       nameservers:
         addresses:
         - 10.142.7.21
