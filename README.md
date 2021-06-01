@@ -162,6 +162,11 @@ foo@bar:~$ cp -p /etc/sysctl.conf  /etc/sysctl.conf.bck
 foo@bar:~$ sed '/net.ipv4.ip_forward=1/s/^#//' /tmp/sysctl.conf
 ```
 
+```console
+## disable firewall
+foo@bar:~$ sudo ufw disable
+```
+
 
 ## Disable systemd-resolved on Ubuntu (Optional)
 ```console
