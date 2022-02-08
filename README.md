@@ -204,4 +204,49 @@ foo@bar:~$ sudo apt-get install tasksel gdm3
 foo@bar:~$ sudo tasksel install ubuntu-desktop-minimal
 foo@bar:~$ sudo reboot
 ```
+---
 
+## Installing DHCP server  isc-dhcp-server
+```
+sudo apt install isc-dhcp-server
+```
+
+edit `sudo vi /etc/default/isc-dhcp-server` and modify `INTERFACESv4=""` to service the required interfaces. For e.g. `INTERFACESv4="vlan102 vlan104"`
+
+edit `/etc/dhcp/dhcpd.conf` and modify the following - 
+
+```
+option domain-name "env1.lab.test";
+option domain-name-servers 192.168.100.1;
+
+authoritative;
+
+subnet 192.168.102.0 netmask 255.255.254.0 {
+  range 192.168.103.128 192.168.103.192;
+  option domain-name-servers 192.168.100.1;
+  option domain-name "env1.lab.test";
+  option subnet-mask 255.255.254.0;
+  option routers 192.168.102.1;
+  option broadcast-address 192.168.103.255;
+  option ntp-servers ntp.vmware.com;
+  default-lease-time 600;
+  max-lease-time 7200;
+}
+
+subnet 192.168.104.0 netmask 255.255.254.0 {
+  range 192.168.105.128 192.168.105.192;
+  option domain-name-servers 192.168.100.1;
+  option domain-name "env1.lab.test";
+  option subnet-mask 255.255.254.0;
+  option routers 192.168.104.1;
+  option broadcast-address 192.168.105.255;
+  option ntp-servers ntp.vmware.com;
+  default-lease-time 600;
+  max-lease-time 7200;
+}
+```
+
+restart DHCP service -
+```
+sudo systemctl restart isc-dhcp-server.service
+```
