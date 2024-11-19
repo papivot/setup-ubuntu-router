@@ -36,6 +36,7 @@ network:
     ${LAN1_NIC}:
       addresses:
       - 192.168.100.1/23
+      mtu: 9000
       nameservers:
         addresses:
         - 192.168.1.8
@@ -45,6 +46,7 @@ network:
     ${LAN2_NIC}:
       addresses:
       - 192.168.102.1/23
+      mtu: 9000
       nameservers:
         addresses:
         - 192.168.1.8
@@ -85,6 +87,7 @@ network:
     ${LAN1_NIC}:
       addresses:
       - 192.168.100.1/23
+      mtu: 9000
       nameservers:
         addresses:
         - 10.142.7.21
@@ -95,7 +98,8 @@ network:
   vlans:
     vlan102:
       id: 102
-      link: ${LAN1_NIC} 
+      link: ${LAN1_NIC}
+      mtu: 9000
       addresses:
       - 192.168.102.1/23
       nameservers:
@@ -108,6 +112,7 @@ network:
     vlan104:
       id: 104
       link: ${LAN1_NIC}
+      mtu: 9000
       addresses:
       - 192.168.104.1/23
       nameservers:
